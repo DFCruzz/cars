@@ -1,4 +1,4 @@
-import prisma from "../config/database"
+import prisma from "../src/config/database"
 import { Car } from "@prisma/client"
 
 async function main() {
@@ -14,15 +14,15 @@ async function main() {
     ]
 
     for (const car of cars) {
-        const existingCar = await prisma.car.findUnique({
+        const isPlateRegistered = await prisma.car.findUnique({
             where: { licensePlate: car.licensePlate },
         })
 
-        if (!existingCar) {
+        if (!isPlateRegistered) {
             await prisma.car.create({
                 data: car,
             })
-            console.log(`${car}`)
+            console.log(`${car.model}, ${car.licensePlate} registered`)
         }
     }
 }
